@@ -84,12 +84,17 @@ Expose your controller methods to ExtDirect Api
     // ...
     namespace Neton\HelloBundle\Controller;
 
+    // these imports are only needed if you are using symfony-standard
+    // ( because of doctrine's annotation-scanner )
+    use Neton\DirectBundle\Api\Remote;
+    use Neton\DirectBundle\Api\Form;
+
     class TestController extends Controller
     {
        /*
         * Single exposed method.
         *
-        * @remote    // this annotation expose the method to API
+        * @Remote    // this annotation expose the method to API
         * @param  array $params
         * @return string
         */
@@ -101,8 +106,8 @@ Expose your controller methods to ExtDirect Api
         /*
          * An action to handle forms.
          *
-         * @remote   // this annotation expose the method to API
-         * @form     // this annotation expose the method to API with formHandler option
+         * @Remote   // this annotation expose the method to API
+         * @Form     // this annotation expose the method to API with formHandler option
          * @param array $params Form submited values
          * @param array $files  Uploaded files like $_FILES
          */
