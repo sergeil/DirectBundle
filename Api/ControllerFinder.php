@@ -17,7 +17,8 @@ class ControllerFinder
      */
     public function getControllers($bundle)
     {
-        $dir = $bundle->getPath()."/Controller";
+        $ds = DIRECTORY_SEPARATOR;
+        $dir = $bundle->getPath().$ds."Controller";
         $controllers = array();
         
         if (is_dir($dir)) {
@@ -25,10 +26,27 @@ class ControllerFinder
             $finder->files()->in($dir)->name('*Controller.php');
             
             foreach ($finder as $file) {
+                /* @var \SplFileInfo $file */
+                $expFilename = explode($ds, $file->getPath());
+                $expDir = explode($ds, $dir);
 
-                $name = explode('.',$file->getFileName());
-                $class = $bundle->getNamespace()."\\Controller\\".$name[0];
-                $controllers[] = $class;
+                $isNested = false;
+                $nestedPath = array_slice($expFilename, count($expDir));
+
+                $class = $bundle->getNamespace().'\\Controller';
+                $name = explode('.', $file->getFileName());
+                if (count($expFilename) > count($expDir)) { // located in subdirectory
+                    $isNested = true;
+                    $class .= '\\'.implode('\\', $nestedPath).'\\'.$name[0];
+                } else {
+                    $class .= '\\'.$name[0];
+                }
+                
+                $controllers[] = array(
+                    'class' => $class,
+                    'isNested' => $isNested,
+                    'path' => $nestedPath
+                );
             }
         }
 

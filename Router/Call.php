@@ -133,7 +133,7 @@ class Call
         $this->method = $call['method'];
         $this->type   = $call['type'];
         $this->tid    = $call['tid'];
-        $this->data   = (array)$call['data'][0];
+        $this->data   = (array)$call['data'][0];// sli: undefined offset if no params provided in procedure invocation
     }
 
     /**

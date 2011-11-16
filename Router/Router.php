@@ -93,13 +93,11 @@ class Router
      */
     private function resolveController($action)
     {
-        list($bundleName, $controllerName) = explode('_',$action);
-        $bundleName.= "Bundle";
-        
-        $bundle = $this->container->get('kernel')->getBundle($bundleName);
-        $namespace = $bundle->getNamespace()."\\Controller";
+        $exp = explode('_', $action);
+        $bundleName = $exp[0]; // TODO
 
-        $class = $namespace."\\".$controllerName."Controller";
+        $bundle = $this->container->get('kernel')->getBundle($bundleName.'Bundle');
+        $class = $bundle->getNamespace().'\Controller\\'.implode('\\', array_slice($exp, 1)).'Controller';
 
         try {
             $controller = new $class();

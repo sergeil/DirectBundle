@@ -62,18 +62,18 @@ class Api
         foreach ($bundles as $bundle => $controllers ) {
             $bundleShortName = str_replace('Bundle', '', $bundle);
             
-            foreach ($controllers as $controller) {
-                $api = new ControllerApi($this->container, $controller);
+            foreach ($controllers as $def) {
+                $api = new ControllerApi($this->container, $def['class']);
 
+                $actionPrefix = $def['isNested'] ? $bundleShortName.'_'.implode('_', $def['path']) : $bundleShortName;
                 if ($api->isExposed()) {
-                    $actions[$bundleShortName."_".$api->getActionName()] = $api->getApi();
+                    $actions[$actionPrefix."_".$api->getActionName()] = $api->getApi();
                 }
             }
         }
 
         return array(
-            'url' => $this->container->get('request')->getBaseUrl().
-                     $this->container->getParameter('direct.api.route_pattern'),
+            'url' => $this->container->get('request')->getBaseUrl().$this->container->getParameter('direct.api.route_pattern'),
             'type' => $this->container->getParameter('direct.api.type'),
             'namespace' => $this->container->getParameter('direct.api.namespace'),
             'id' => $this->container->getParameter('direct.api.id'),

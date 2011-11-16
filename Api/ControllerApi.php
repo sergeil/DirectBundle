@@ -30,6 +30,11 @@ class ControllerApi
     protected $container;
 
     /**
+     * @var boolean
+     */
+    protected $isNested;
+
+    /**
      * Initialize the object.
      * 
      * @param \Symfony\Component\Container $container
@@ -119,7 +124,7 @@ class ControllerApi
             $isRemote = !!preg_match('/' . $this->remoteAttribute . '/', $doc);
 
             if ($isRemote) {
-                $api['name'] = str_replace('Action','',$method->getName());
+                $api['name'] = str_replace('Action', '', $method->getName());
                 $api['len'] = 1;//$method->getNumberOfParameters();
 
                 if(!!preg_match('/' . $this->formAttribute . '/', $doc)) {
