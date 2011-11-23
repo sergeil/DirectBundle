@@ -10,7 +10,7 @@ use Symfony\Component\Finder\Finder;
 class ControllerFinder
 {
     /**
-     * Find all controllers from a bundle.
+     * Find all controllers from a bundle, nested controllers will also be taken into account.
      * 
      * @param  \Symfony\HttpKernel\Bundle\Bundle $bundle
      * @return Mixed
