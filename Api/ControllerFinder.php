@@ -3,7 +3,7 @@ namespace Neton\DirectBundle\Api;
 
 use Symfony\Component\Finder\Finder;
 /**
- * Controller Finder find all controllers from a Bundle.
+ * Controller Finder find all controllers from a Bundle, nested controllers will be taken into account as well.
  *
  * @author Otavio Fernandes <otavio@neton.com.br>
  */
