@@ -77,11 +77,14 @@ class Router
         }
 
         if ('form' == $this->request->getCallType()) {
-            $result = $call->getResponse($controller->$method($call->getData(), $this->request->getFiles()));
+            $result = $call->getResponse(function($call) use ($controller, $method) {
+                return $controller->$method($call->getData(), $this->request->getFiles());
+            });
         } else {
-            $result = $call->getResponse($controller->$method($call->getData()));
+            $result = $call->getResponse(function($call)  use ($controller, $method) {
+                return $controller->$method($call->getData());
+            });
         }
-
         return $result;
     }
 

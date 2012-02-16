@@ -108,18 +108,32 @@ class Call
     /**
      * Return a result wrapper to ExtDirect method call.
      * 
-     * @param  array $result
+     * @param  \Closure $cb
      * @return array
      */
-    public function getResponse($result)
+    public function getResponse($cb)
     {
-        return array(
-          'type' => 'rpc',
-          'tid' => $this->tid,
-          'action' => $this->action,
-          'method' => $this->method,
-          'result' => $result
+        $response = array(
+            'tid' => $this->tid
         );
+
+        try {
+            $response = array_merge($response, array(
+                'result' => $cb($this),
+                'action' => $this->action,
+                'method' => $this->method,
+                'type' => 'rpc',
+            ));
+        } catch (\Exception $e) {
+            $response = array_merge($response, array(
+                'status' => 'false',
+                'type' => 'exception',
+                'message' => $e->getMessage(),
+                'where' => $e->getFile().':'.$e->getLine()
+            ));
+        }
+
+        return $response;
     }
     
     /**
